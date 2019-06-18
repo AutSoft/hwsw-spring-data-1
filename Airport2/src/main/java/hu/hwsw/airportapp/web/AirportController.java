@@ -42,11 +42,6 @@ public class AirportController {
 	
 	@GetMapping("/{id}")
 	ResponseEntity<AirportDTO> getAirportById(@PathVariable Long id) {
-	    Optional<AirportDTO> optional = airportService.getAirportById(id);
-	    if (optional.isEmpty()) {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	    } else {
-	        return ResponseEntity.status(HttpStatus.OK).body(optional.get());
-	    }
+        return ResponseEntity.status(HttpStatus.OK).body(airportService.getAirportById(id).get());
 	}
 }
