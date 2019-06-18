@@ -17,6 +17,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<!-- <junit-jupiter.version>5.2.0</junit-jupiter.version> -->
 	</properties>
 
 	<dependencies>
@@ -37,6 +38,28 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+<!-- 			<version>5.4.2</version> -->
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
