@@ -3,6 +3,7 @@ package hu.hwsw.airportapp.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -59,7 +60,13 @@ public class AirportServiceImpl implements AirportService {
 	
 	@Override
 	public Optional<AirportDTO> getAirportById(Long id) {
-	    return airports.stream().filter(a -> a.getId().equals(id)).findAny();
+		Optional<AirportDTO> airportOptional = airports.stream().filter(a -> a.getId().equals(id)).findAny();
+
+		if (airportOptional.isEmpty()) {
+			throw new NoSuchElementException(String.format("Airport not found with id %d", id));
+		}
+
+		return airportOptional;
 	}
 
 }
