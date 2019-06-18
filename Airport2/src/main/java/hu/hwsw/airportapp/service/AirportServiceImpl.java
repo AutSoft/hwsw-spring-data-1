@@ -3,6 +3,7 @@ package hu.hwsw.airportapp.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -54,6 +55,11 @@ public class AirportServiceImpl implements AirportService {
 		airports.add(airport);
 		
 		return airport;
+	}
+	
+	@Override
+	public Optional<AirportDTO> getAirportById(Long id) {
+	    return airports.stream().filter(a -> a.getId().equals(id)).findAny();
 	}
 
 }
