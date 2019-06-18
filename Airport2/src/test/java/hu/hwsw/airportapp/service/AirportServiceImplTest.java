@@ -1,15 +1,17 @@
 package hu.hwsw.airportapp.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-import hu.hwsw.airportapp.web.dto.airport.AirportDTO;
+import hu.hwsw.airportapp.model.Airport;
 import hu.hwsw.airportapp.web.dto.airport.NewAirportDTO;
 
 public class AirportServiceImplTest {
 	
-private AirportService airportService;
+	private AirportService airportService;
 	
 	@BeforeEach
 	void setup() {
@@ -20,7 +22,7 @@ private AirportService airportService;
 	void createAirport() {
 		NewAirportDTO newAirport = new NewAirportDTO("Budapest", "BUD");
 		
-		AirportDTO airportSaved = airportService.createAirport(newAirport);
+		Airport airportSaved = airportService.createAirport(newAirport);
 		
 		assertEquals(newAirport.getName(), airportSaved.getName());
 		assertEquals(newAirport.getIata(), airportSaved.getIata());

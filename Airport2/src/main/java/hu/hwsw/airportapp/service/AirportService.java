@@ -1,18 +1,17 @@
 package hu.hwsw.airportapp.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 
-import hu.hwsw.airportapp.web.dto.airport.AirportDTO;
+import hu.hwsw.airportapp.model.Airport;
 import hu.hwsw.airportapp.web.dto.airport.NewAirportDTO;
 
 public interface AirportService {
 
-	List<AirportDTO> getAirports(String iata, Pageable pageable);
+	List<Airport> getAirports(String iata, Pageable pageable);
 
-	AirportDTO createAirport(NewAirportDTO newAirport);
+	Airport createAirport(NewAirportDTO newAirport);
 
-	Optional<AirportDTO> getAirportById(Long id);
+	Airport getAirportById(Long id);
 }

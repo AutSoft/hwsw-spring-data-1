@@ -1,72 +1,55 @@
 package hu.hwsw.airportapp.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import hu.hwsw.airportapp.web.dto.airport.AirportDTO;
+import hu.hwsw.airportapp.model.Airport;
+import hu.hwsw.airportapp.repository.AirportRepository;
 import hu.hwsw.airportapp.web.dto.airport.NewAirportDTO;
 
 @Service
 public class AirportServiceImpl implements AirportService {
+	
+	@Autowired
+	AirportRepository airportRepository;
 
-	private List<AirportDTO> airports = new ArrayList<>();
-	private Long nextId = 10L;
-	
-	@PostConstruct
-	public void init() {
-		airports.add(new AirportDTO(1L, LocalDateTime.now(), LocalDateTime.now(), "Budapest Airport", "BUD"));
-		airports.add(new AirportDTO(2L, LocalDateTime.now(), LocalDateTime.now(), "Barcelona Airport", "BCN"));
-		airports.add(new AirportDTO(3L, LocalDateTime.now(), LocalDateTime.now(), "San Francisco Airport", "SFO"));
-	}
-	
 	@Override
-	public List<AirportDTO> getAirports(String iata, Pageable pageable) {
+	public List<Airport> getAirports(String iata, Pageable pageable) {
 		
 		if (StringUtils.isEmpty(iata)) {
-			return airports
-					.stream()
-					.skip(pageable.getOffset())
-					.limit(pageable.getPageSize())
-					.collect(Collectors.toList());
+			return airportRepository.findAll(pageable).getContent();
 		} else {
-			return airports
-					.stream()
-					.filter(a -> a.getIata().equals(iata))
-					.collect(Collectors.toList());
+			return airportRepository.findByIata(iata, pageable).getContent();
 		}
 		
 	}
 
 	@Override
-	public AirportDTO createAirport(NewAirportDTO newAirport) {
-		AirportDTO airport = new AirportDTO(nextId++, 
-				LocalDateTime.now(), LocalDateTime.now(),
-				newAirport.getName(), newAirport.getIata());
-		
-		airports.add(airport);
-		
-		return airport;
+	public Airport createAirport(NewAirportDTO newAirport) {
+		Airport airport = new Airport();
+		airport.setCreatedAt(LocalDateTime.now());
+		airport.setIata(newAirport.getIata());
+		airport.setName(newAirport.getName());
+		airport.setModifiedAt(LocalDateTime.now());
+		return airportRepository.save(airport);
 	}
 	
 	@Override
-	public Optional<AirportDTO> getAirportById(Long id) {
-		Optional<AirportDTO> airportOptional = airports.stream().filter(a -> a.getId().equals(id)).findAny();
+	public Airport getAirportById(Long id) {
+		Optional<Airport> airportOptional = airportRepository.findById(id);
 
 		if (airportOptional.isEmpty()) {
 			throw new NoSuchElementException(String.format("Airport not found with id %d", id));
 		}
 
-		return airportOptional;
+		return airportOptional.get();
 	}
 
 }

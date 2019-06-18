@@ -1,7 +1,7 @@
 package hu.hwsw.airportapp.web;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.hwsw.airportapp.model.Airport;
 import hu.hwsw.airportapp.service.AirportService;
 import hu.hwsw.airportapp.web.dto.airport.AirportDTO;
 import hu.hwsw.airportapp.web.dto.airport.NewAirportDTO;
@@ -30,23 +31,27 @@ public class AirportController {
 		this.airportService = airportService;
 	}
 
+	
 	@GetMapping
 	List<AirportDTO> getAirports(@RequestParam(name = "iata", required = false) String iata, Pageable pageable) {
-		return airportService.getAirports(iata, pageable);
+		return airportService.getAirports(iata, pageable).stream().map(airport -> mapAirportToDto(airport)).collect(Collectors.toList());
+	}
+
+
+	private AirportDTO mapAirportToDto(Airport airport) {
+		return new AirportDTO(airport.getId(), airport.getCreatedAt(), airport.getModifiedAt(), airport.getName(), airport.getIata());
 	}
 	
 	@PostMapping
 	AirportDTO createAirport(@RequestBody @Valid NewAirportDTO newAirport) {
-		return airportService.createAirport(newAirport);
+		return mapAirportToDto(airportService.createAirport(newAirport));
 	}
 	
 	@GetMapping("/{id}")
 	ResponseEntity<AirportDTO> getAirportById(@PathVariable Long id) {
-	    Optional<AirportDTO> optional = airportService.getAirportById(id);
-	    if (optional.isEmpty()) {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	    } else {
-	        return ResponseEntity.status(HttpStatus.OK).body(optional.get());
-	    }
+	    return ResponseEntity
+	    		.status(HttpStatus.OK)
+	    		.body(mapAirportToDto(airportService.getAirportById(id)));
+	    
 	}
 }
