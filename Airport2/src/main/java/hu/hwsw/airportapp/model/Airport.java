@@ -17,6 +17,17 @@ public class Airport {
 	private String name;
 	private String iata;
 	
+	public Airport() {
+	}
+	
+	public Airport(Long id, LocalDateTime createdAt, LocalDateTime modifiedAt, String name, String iata) {
+		super();
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+		this.name = name;
+		this.iata = iata;
+	}
 	public Long getId() {
 		return id;
 	}
