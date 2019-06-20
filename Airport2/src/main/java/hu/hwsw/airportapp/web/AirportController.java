@@ -11,11 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.hwsw.airportapp.mapper.AirportMapper;
 import hu.hwsw.airportapp.model.Airport;
 import hu.hwsw.airportapp.service.AirportService;
 import hu.hwsw.airportapp.web.dto.airport.AirportDTO;
@@ -53,5 +55,10 @@ public class AirportController {
 	    		.status(HttpStatus.OK)
 	    		.body(mapAirportToDto(airportService.getAirportById(id)));
 	    
+	}
+	
+	@PutMapping("/{id}")
+	AirportDTO updateAirport(@PathVariable Long id, @RequestBody @Valid NewAirportDTO newAirport) {
+		return AirportMapper.INSTANCE.airportToDto(airportService.updateAirport(id, newAirport));
 	}
 }
