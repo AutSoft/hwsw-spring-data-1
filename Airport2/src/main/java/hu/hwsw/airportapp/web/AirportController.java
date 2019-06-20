@@ -61,4 +61,10 @@ public class AirportController {
 	AirportDTO updateAirport(@PathVariable Long id, @RequestBody @Valid NewAirportDTO newAirport) {
 		return AirportMapper.INSTANCE.airportToDto(airportService.updateAirport(id, newAirport));
 	}
+
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@DeleteMapping("/{id}")
+	public void deleteAirport(@PathVariable Long id) {
+		airportRepository.deleteById(id);
+	}
 }
