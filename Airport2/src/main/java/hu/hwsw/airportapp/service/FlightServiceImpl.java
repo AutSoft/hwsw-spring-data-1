@@ -2,10 +2,13 @@ package hu.hwsw.airportapp.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
 
+import hu.hwsw.airportapp.mapper.FlightMapper;
+import hu.hwsw.airportapp.model.Airport;
 import hu.hwsw.airportapp.model.Flight;
 import hu.hwsw.airportapp.repository.AirportRepository;
 import hu.hwsw.airportapp.repository.FlightRepository;
@@ -25,11 +28,19 @@ public class FlightServiceImpl implements FlightService {
 		this.flightRepository = flightRepository;
 	}
 
-    
+
 	@Override
+	@Transactional
 	public Flight createFlightWithAirports(NewFlightWithNewAirportsDTO newFlightWithNewAirportsDTO) {
-		//TODO: save all 3 entities
-		return null;
+		Airport fromAirport = airportService.createAirport(newFlightWithNewAirportsDTO.getFromAirport());
+		Airport toAirport = airportService.createAirport(newFlightWithNewAirportsDTO.getToAirport());
+		
+		Flight flight = new Flight();
+		FlightMapper.INSTANCE.updateFromDto(newFlightWithNewAirportsDTO.getNewFlight(), flight);
+		flightRepository.save(flight);
+		flight.setFromAirport(fromAirport);
+		flight.setToAirport(toAirport);
+		return flight;
 	}
 
 
