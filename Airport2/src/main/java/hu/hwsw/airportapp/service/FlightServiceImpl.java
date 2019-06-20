@@ -5,13 +5,15 @@ import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import hu.hwsw.airportapp.mapper.FlightMapper;
 import hu.hwsw.airportapp.model.Airport;
 import hu.hwsw.airportapp.model.Flight;
-import hu.hwsw.airportapp.repository.AirportRepository;
 import hu.hwsw.airportapp.repository.FlightRepository;
+import hu.hwsw.airportapp.repository.FlightSpecification;
 import hu.hwsw.airportapp.web.dto.flight.NewFlightDTO;
 import hu.hwsw.airportapp.web.dto.flight.NewFlightWithNewAirportsDTO;
 
@@ -78,5 +80,13 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public void deleteFlightById(Long id) {
     }
+
+
+	@Override
+	public List<Flight> searchFlights(Flight flight) {
+		
+		FlightSpecification spec = new FlightSpecification(flight);
+		return flightRepository.findAll(spec);
+	}
 
 }

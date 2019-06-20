@@ -20,4 +20,6 @@ public interface FlightMapper {
 	List<FlightDTO> flightsToDto(List<Flight> flight);
 	
 	void updateFromDto(NewFlightDTO dto, @MappingTarget Flight flight);
+
+	Flight dtoToFlight(FlightDTO flight);
 }

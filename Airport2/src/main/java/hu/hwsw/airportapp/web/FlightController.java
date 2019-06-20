@@ -71,6 +71,12 @@ public class FlightController {
     public List<FlightDTO> getFlights() {
         return FlightMapper.INSTANCE.flightsToDto(flightService.getFlights());
     }
+    
+    @PostMapping("/flights/search")
+    public List<FlightDTO> searchFlights(@RequestBody FlightDTO flight) {
+        FlightMapper flightMapper = FlightMapper.INSTANCE;
+		return flightMapper.flightsToDto(flightService.searchFlights(flightMapper.dtoToFlight(flight)));
+    }
 
     @GetMapping("/flights/{id}")
     public FlightDTO getFlightById(@PathVariable Long id) {
