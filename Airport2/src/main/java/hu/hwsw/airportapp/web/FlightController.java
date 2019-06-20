@@ -51,6 +51,12 @@ public class FlightController {
     public FlightDTO createFlight(@RequestBody NewFlightWithNewAirportsDTO newFlightWithNewAirportsDTO){
         return FlightMapper.INSTANCE.flightToDto(flightService.createFlightWithAirports(newFlightWithNewAirportsDTO));
     }
+    
+    @PostMapping("/flights/search")
+    public List<FlightDTO> searchFlights(@RequestBody FlightDTO example){
+    	FlightMapper mapper = FlightMapper.INSTANCE;
+		return mapper.flightsToDto(flightService.searchFlights(mapper.dtoToFlight(example)));
+    }
 
     @GetMapping("/airports/{airportId}/arriving-flights")
     public List<FlightDTO> getArrivingFlightsByAirportId(@PathVariable Long airportId) {

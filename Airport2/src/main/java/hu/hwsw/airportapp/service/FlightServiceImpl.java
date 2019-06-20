@@ -5,10 +5,14 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import hu.hwsw.airportapp.mapper.FlightMapper;
+import hu.hwsw.airportapp.model.Airport;
 import hu.hwsw.airportapp.model.Flight;
 import hu.hwsw.airportapp.repository.AirportRepository;
 import hu.hwsw.airportapp.repository.FlightRepository;
+import hu.hwsw.airportapp.repository.FlightSpecification;
 import hu.hwsw.airportapp.web.dto.flight.NewFlightDTO;
 import hu.hwsw.airportapp.web.dto.flight.NewFlightWithNewAirportsDTO;
 
@@ -27,9 +31,19 @@ public class FlightServiceImpl implements FlightService {
 
     
 	@Override
+	@Transactional
 	public Flight createFlightWithAirports(NewFlightWithNewAirportsDTO newFlightWithNewAirportsDTO) {
-		//TODO: save all 3 entities
-		return null;
+		
+		Airport fromAirport = airportService.createAirport(newFlightWithNewAirportsDTO.getFromAirport());
+		Airport toAirport = airportService.createAirport(newFlightWithNewAirportsDTO.getToAirport());
+		Flight flight = new Flight();
+		FlightMapper.INSTANCE.updateFromDto(newFlightWithNewAirportsDTO.getNewFlight(), flight);
+		flight = flightRepository.save(flight);
+		
+		flight.setFromAirport(fromAirport);
+		flight.setToAirport(toAirport);
+		
+		return flight;
 	}
 
 
@@ -67,5 +81,11 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public void deleteFlightById(Long id) {
     }
+
+
+	@Override
+	public List<Flight> searchFlights(Flight flight) {
+		return flightRepository.findAll(new FlightSpecification(flight));
+	}
 
 }

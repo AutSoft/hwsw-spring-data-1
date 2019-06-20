@@ -27,4 +27,6 @@ public interface FlightService {
     void deleteFlightById(Long id);
 
 	Flight createFlightWithAirports(NewFlightWithNewAirportsDTO newFlightWithNewAirportsDTO);
+	
+	List<Flight> searchFlights(Flight flight);
 }
