@@ -3,16 +3,24 @@ package hu.hwsw.airportapp.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Airport {
 	
 	@Id
 	@GeneratedValue
 	private Long id;
+	@CreatedDate
 	private LocalDateTime createdAt;
+	@LastModifiedDate
 	private LocalDateTime modifiedAt;
 	private String name;
 	private String iata;
