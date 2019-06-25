@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.hwsw.airportapp.mapper.FlightMapper;
+import hu.hwsw.airportapp.security.MyUserDetails;
 import hu.hwsw.airportapp.service.FlightService;
 import hu.hwsw.airportapp.web.dto.flight.FlightDTO;
 import hu.hwsw.airportapp.web.dto.flight.NewFlightDTO;
@@ -25,6 +27,8 @@ import hu.hwsw.airportapp.web.dto.flight.NewFlightWithNewAirportsDTO;
 @RequestMapping("/api/v1")
 public class FlightController {
 
+	
+	
     private FlightService flightService;
 
     public FlightController(FlightService flightService) {
@@ -74,7 +78,8 @@ public class FlightController {
     }
 
     @GetMapping("/flights")
-    public List<FlightDTO> getFlights() {
+    public List<FlightDTO> getFlights(@AuthenticationPrincipal MyUserDetails userDetails) {
+    	System.out.println(userDetails.getUsername());
         return FlightMapper.INSTANCE.flightsToDto(flightService.getFlights());
     }
 
